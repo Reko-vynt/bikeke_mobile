@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "942223948625",
+    "project_id": "bikekemobile-56511",
+    "storage_bucket": "bikekemobile-56511.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:942223948625:android:89325d698277aa65a23170",
+        "android_client_info": {
+          "package_name": "com.example.bikeke_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "942223948625-k7l98lhn05igqi40f1s6heeghf7qh76m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bikeke_app",
+            "certificate_hash": "f3c38f2b7e0cadd8b09dea94a7fb9350fe2f3760"
+          }
+        },
+        {
+          "client_id": "942223948625-jhg9ibpevvr0r0l42h79u875u1autab0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBN1me1f4P3t3zESPPTwM57rgBi1qlfC2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "942223948625-jhg9ibpevvr0r0l42h79u875u1autab0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:942223948625:android:7fb74deca02f4be8a23170",
+        "android_client_info": {
+          "package_name": "com.example.bikeke_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "942223948625-jhg9ibpevvr0r0l42h79u875u1autab0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBN1me1f4P3t3zESPPTwM57rgBi1qlfC2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "942223948625-jhg9ibpevvr0r0l42h79u875u1autab0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
