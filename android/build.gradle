@@ -16,8 +16,20 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven {
+      url 'https://api.mapbox.com/downloads/v1/releases/maven'
+      authentication {
+          basic(BasicAuthentication)
+      }
+      credentials {
+                        // Do not change the username below.
+                        // This should always be `mapbox` (not your username).
+                        username = 'mapbox'
+                        // Use the secret token you stored in gradle.properties as the password
+                        password = project.properties['sk.eyJ1IjoiYmlrZWtlYXBwIiwiYSI6ImNsOWQ0enUzaTA1dGEzb2w5cHBnd2g2cTUifQ.bvZzCcgCbJ3w_dfddXw7zg'] ?: ""
+                    }
     }
-}
+}}
 
 rootProject.buildDir = '../build'
 subprojects {

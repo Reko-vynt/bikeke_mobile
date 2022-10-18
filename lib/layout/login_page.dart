@@ -2,7 +2,6 @@ import 'package:bikeke_app/layout/home_driver.dart';
 import 'package:flutter/material.dart';
 
 import '../design/app_color.dart';
-import '../network/api_connect.dart';
 import '../service/firebase_service.dart';
 
 class LoginPage extends StatefulWidget {
@@ -80,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
           height: height / 8,
           child: TextFormField(
             controller: emailController,
-            cursorColor: Theme.of(context).cursorColor,
+            cursorColor: Theme.of(context).canvasColor,
             maxLength: 20,
             decoration: InputDecoration(
               icon: Icon(Icons.person),
@@ -102,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
             child: TextFormField(
               obscureText: true,
               controller: passwordController,
-              cursorColor: Theme.of(context).cursorColor,
+              cursorColor: Theme.of(context).canvasColor,
               maxLength: 20,
               decoration: InputDecoration(
                 icon: Icon(Icons.key),
