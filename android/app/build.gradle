@@ -69,9 +69,6 @@ flutter {
 
 dependencies {
     implementation 'com.mapbox.maps:android:10.8.1'
-    implementation ('com.mapbox.maps:android:10.8.1'){
-    exclude group: 'group_name', module: 'module_name'
-}
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.firebase:firebase-analytics'
 }

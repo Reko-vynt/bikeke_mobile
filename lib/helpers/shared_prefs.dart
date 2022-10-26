@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:bikeke_app/main.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 
 LatLng getCurrentLatLngFromSharedPrefs() {
   return LatLng(sharedPreferences.getDouble('latitude')!,

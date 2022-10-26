@@ -4,19 +4,24 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AppbarDriver extends StatelessWidget {
   const AppbarDriver(
-      {Key? key, this.title, this.implementLeading = false, this.titleString})
+      {Key? key,
+      this.title,
+      this.implementLeading = false,
+      this.titleString,
+      this.height})
       : super(key: key);
 
   final Widget? title;
   final String? titleString;
   final bool implementLeading;
+  final double? height;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
           SizedBox(
-            height: 103,
+            height: height,
             child: AppBar(
               centerTitle: true,
               automaticallyImplyLeading: false,
@@ -26,10 +31,12 @@ class AppbarDriver extends StatelessWidget {
                   Row(
                     children: [
                       if (implementLeading)
-                        Icon(
-                          FontAwesomeIcons.arrowLeftLong,
+                        IconButton(
+                          icon: Icon(FontAwesomeIcons.arrowLeftLong),
                           color: Colors.black,
-                          size: 20,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         ),
                       Expanded(
                           child: Center(
@@ -43,7 +50,6 @@ class AppbarDriver extends StatelessWidget {
               ),
             ),
           ),
-          
         ],
       ),
     );

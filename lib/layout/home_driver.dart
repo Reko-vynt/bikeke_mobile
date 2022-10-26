@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:location/location.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:bikeke_app/layout/plan_screen.dart';
 
 class HomeDriver extends StatelessWidget {
   const HomeDriver({Key? key, this.userName = 'Driver'}) : super(key: key);
@@ -46,6 +46,7 @@ class HomeDriver extends StatelessWidget {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.bottom]);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(children: [
         AppbarDriver(
           title: Row(children: [
@@ -76,7 +77,7 @@ class HomeDriver extends StatelessWidget {
             )
           ]),
           implementLeading: true,
-          titleString: "Plan",
+          height: 103,
         ),
         Container(
           margin: EdgeInsets.only(top: 103),
@@ -90,7 +91,10 @@ class HomeDriver extends StatelessWidget {
                     children: [
                       FloatingActionButton(
                         heroTag: "f1",
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => Home()));
+                        },
                         child: Icon(FontAwesomeIcons.avianex),
                       ),
                       Text('Work'),
@@ -100,8 +104,8 @@ class HomeDriver extends StatelessWidget {
                     FloatingActionButton(
                       heroTag: "f2",
                       onPressed: () {
-                        Navigator.push(
-                            context, MaterialPageRoute(builder: (_) => Home()));
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => PlanScreen()));
                       },
                       child: Icon(FontAwesomeIcons.avianex),
                     ),

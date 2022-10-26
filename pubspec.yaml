@@ -43,12 +43,12 @@ dependencies:
   salomon_bottom_bar: ^3.3.1
   font_awesome_flutter: ^10.2.1
   flutter_bloc: ^8.1.1
-  mapbox_gl: ^0.16.0
   shared_preferences: ^2.0.15
   flutter_dotenv: ^5.0.2
   location: ^4.4.0
   json_annotation: ^4.0.1
   latlong2: ^0.8.1
+  mapbox_gl: ^0.16.0-nullsafety.1
 
 
 dev_dependencies:

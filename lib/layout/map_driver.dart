@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:bikeke_app/helpers/app_constants.dart';
 import 'package:bikeke_app/helpers/shared_prefs.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -15,20 +13,33 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
-  // final Completer<MapboxMapController> _controller = Completer();
-  static LocationData? currentLocation;
-  final mapController = MapController();
-  void getLocation() async {
+class _HomeState extends State<Home> with TickerProviderStateMixin {
+  final Completer<MapboxMapController> _controller = Completer();
+  final LatLng _currentLocation = getCurrentLatLngFromSharedPrefs();
+  LocationData? currentLocation;
+  MapboxMapController? mapController;
+  Future<void> getLocation() async {
     Location location = Location();
     location.getLocation().then((location) {
       currentLocation = location;
     });
-
-    location.onLocationChanged.listen((newLoc) {
+    mapController = await _controller.future;
+    location.onLocationChanged.listen((newLoc) async {
       currentLocation = newLoc;
-      mapController.move(AppConstants().getLoc(currentLocation!), 18.0);
-      setState(() {});
+      if (mounted) {
+        mapController?.clearSymbols();
+
+        setState(() {
+          mapController?.animateCamera(CameraUpdate.newCameraPosition(
+              CameraPosition(
+                  target: LatLng(newLoc.latitude!, newLoc.longitude!),
+                  zoom: 13)));
+          mapController?.addSymbol(SymbolOptions(
+              iconImage: 'assets/images/marker-icon.png',
+              iconSize: 0.3,
+              geometry: LatLng(newLoc.latitude!, newLoc.longitude!)));
+        });
+      }
     });
   }
 
@@ -40,6 +51,7 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
+    mapController?.dispose();
     super.dispose();
   }
 
@@ -48,63 +60,60 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: Stack(
         children: [
-          // MapboxMap(
-          //     minMaxZoomPreference: const MinMaxZoomPreference(14, 37),
-          //     myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-          //     zoomGesturesEnabled: true,
-          //     onMapCreated: (mapController) {
-          //       _controller.complete(mapController);
-          //     },
-          //     initialCameraPosition: CameraPosition(
-          //         target: LatLng(
-          //             _currentLocation.latitude, _currentLocation.longitude),
-          //         zoom: 13),
-          //     accessToken:
-          //         'sk.eyJ1IjoiYmlrZWtlYXBwIiwiYSI6ImNsOWQ0enUzaTA1dGEzb2w5cHBnd2g2cTUifQ.bvZzCcgCbJ3w_dfddXw7zg'),
-          FlutterMap(
-            mapController: mapController,
-            options: MapOptions(
-              minZoom: 5,
-              maxZoom: 18,
-              zoom: 13,
-              center: AppConstants.myLocation,
-              onMapReady: () {
-                setState(() {});
+          MapboxMap(
+              onMapCreated: (mapController) {
+                _controller.complete(mapController);
               },
-              onPositionChanged: ((position, hasGesture) {
-                Location location = Location();
-                location.getLocation().then((location) {
-                  currentLocation = location;
-                });
+              initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                      _currentLocation.latitude, _currentLocation.longitude),
+                  zoom: 13),
+              accessToken:
+                  'sk.eyJ1IjoiYmlrZWtlYXBwIiwiYSI6ImNsOWQ0enUzaTA1dGEzb2w5cHBnd2g2cTUifQ.bvZzCcgCbJ3w_dfddXw7zg'),
+          // FlutterMap(
+          //   mapController: mapController,
+          //   options: MapOptions(
+          //     minZoom: 5,
+          //     maxZoom: 18,
+          //     zoom: 13,
+          //     center: AppConstants.myLocation,
+          //     onMapReady: () {
+          //       setState(() {});
+          //     },
+          //     onPositionChanged: ((position, hasGesture) {
+          //       Location location = Location();
+          //       location.getLocation().then((location) {
+          //         currentLocation = location;
+          //       });
 
-                location.onLocationChanged.listen((newLoc) {
-                  currentLocation = newLoc;
-                  mapController.move(
-                      AppConstants().getLoc(currentLocation!), 18.0);
-                  setState(() {});
-                });
-              }),
-            ),
-            children: [
-              TileLayer(
-                urlTemplate:
-                    "https://api.mapbox.com/styles/v1/bikekeapp/cl8rjpomp000n15t76z5cj7a9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYmlrZWtlYXBwIiwiYSI6ImNsOHJqbWZ2ajBiejAzd2xsZWt4czNlbmYifQ.wmJpDo_8Kp3y4mdjQchICg",
-                additionalOptions: {
-                  'mapStyleId': AppConstants.mapBoxStyleId,
-                  'accessToken': AppConstants.mapBoxAccessToken,
-                },
-              ),
-              MarkerLayer(
-                markers: [
-                  Marker(
-                      point: AppConstants().getLoc(currentLocation!),
-                      builder: (_) {
-                        return Icon(FontAwesomeIcons.arrowUp);
-                      })
-                ],
-              )
-            ],
-          ),
+          //       location.onLocationChanged.listen((newLoc) {
+          //         currentLocation = newLoc;
+          //         mapController.move(
+          //             AppConstants().getLoc(currentLocation!), 18.0);
+          //         setState(() {});
+          //       });
+          //     }),
+          //   ),
+          //   children: [
+          //     TileLayer(
+          //       urlTemplate:
+          //           "https://api.mapbox.com/styles/v1/bikekeapp/cl8rjpomp000n15t76z5cj7a9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYmlrZWtlYXBwIiwiYSI6ImNsOHJqbWZ2ajBiejAzd2xsZWt4czNlbmYifQ.wmJpDo_8Kp3y4mdjQchICg",
+          //       additionalOptions: {
+          //         'mapStyleId': AppConstants.mapBoxStyleId,
+          //         'accessToken': AppConstants.mapBoxAccessToken,
+          //       },
+          //     ),
+          //     MarkerLayer(
+          //       markers: [
+          //         Marker(
+          //             point: AppConstants().getLoc(currentLocation!),
+          //             builder: (_) {
+          //               return Icon(FontAwesomeIcons.arrowUp);
+          //             })
+          //       ],
+          //     )
+          //   ],
+          // ),
           Positioned(
             child: IconButton(
                 onPressed: () async {
