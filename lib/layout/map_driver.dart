@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bikeke_app/helpers/shared_prefs.dart';
+import 'package:bikeke_app/helpers/mapbox_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:location/location.dart';
@@ -15,9 +15,16 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   final Completer<MapboxMapController> _controller = Completer();
-  final LatLng _currentLocation = getCurrentLatLngFromSharedPrefs();
   LocationData? currentLocation;
   MapboxMapController? mapController;
+  late Map geometry;
+  Future<Symbol>? driver;
+  static const LatLng driverLatlng = LatLng(21.050836, 105.804941);
+  static const LatLng userLatlng = LatLng(21.050562, 105.802962);
+  // final Completer<MapboxMapController> _controller = Completer();
+  // final LatLng _currentLocation = getCurrentLatLngFromSharedPrefs();
+  // LocationData? currentLocation;
+  // MapboxMapController? mapController;
   Future<void> getLocation() async {
     Location location = Location();
     location.getLocation().then((location) {
@@ -27,31 +34,95 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     location.onLocationChanged.listen((newLoc) async {
       currentLocation = newLoc;
       if (mounted) {
-        mapController?.clearSymbols();
-
-        setState(() {
-          mapController?.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(
-                  target: LatLng(newLoc.latitude!, newLoc.longitude!),
-                  zoom: 13)));
-          mapController?.addSymbol(SymbolOptions(
-              iconImage: 'assets/images/marker-icon.png',
-              iconSize: 0.3,
-              geometry: LatLng(newLoc.latitude!, newLoc.longitude!)));
-        });
+        addSymbol();
+        setState(() {});
       }
     });
   }
 
+  void initializeLocationAndSave() async {
+    Location _location = Location();
+    bool? _serviceEnabled;
+    PermissionStatus? _permissionGranted;
+
+    _serviceEnabled = await _location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await _location.requestService();
+    }
+
+    _permissionGranted = await _location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await _location.requestPermission();
+    }
+  }
+
+// For controlling the view of the Map
+  final CameraPosition _initialLocation =
+      CameraPosition(target: driverLatlng, zoom: 20);
+  void setCameraPosition() async {
+    mapController = await _controller.future;
+    Map modifiedResponse =
+        await getDirectionsAPIResponse(driverLatlng, userLatlng);
+    geometry = modifiedResponse['geometry'];
+
+    final _fills = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "id": 0,
+          "properties": <String, dynamic>{},
+          "geometry": geometry,
+        },
+      ],
+    };
+
+    // Add new source and lineLayer
+    await mapController?.addSource(
+        "fills", GeojsonSourceProperties(data: _fills));
+    await mapController?.addLineLayer(
+      "fills",
+      "lines",
+      LineLayerProperties(
+        lineColor: Colors.indigo.toHexStringRGB(),
+        lineCap: "round",
+        lineJoin: "round",
+        lineWidth: 5,
+      ),
+    );
+    mapController?.addSymbol(SymbolOptions(
+        iconImage: 'assets/images/marker-icon.png',
+        iconSize: 0.3,
+        iconColor: 'red',
+        geometry: driverLatlng));
+    driver = mapController?.addSymbol(SymbolOptions(
+        iconImage: 'assets/images/marker-icon.png',
+        iconSize: 0.3,
+        iconColor: 'red',
+        geometry: userLatlng));
+  }
+
+  addSymbol() async {
+    mapController = await _controller.future;
+    Symbol? drivers = await driver;
+    mapController?.updateSymbol(
+        drivers!,
+        SymbolOptions(
+            iconImage: 'assets/images/marker-icon.png',
+            iconSize: 0.3,
+            geometry: LatLng(
+                currentLocation!.latitude!, currentLocation!.longitude!)));
+  }
+
   @override
   void initState() {
+    initializeLocationAndSave();
     getLocation();
     super.initState();
   }
 
   @override
   void dispose() {
-    mapController?.dispose();
     super.dispose();
   }
 
@@ -64,12 +135,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               onMapCreated: (mapController) {
                 _controller.complete(mapController);
               },
-              initialCameraPosition: CameraPosition(
-                  target: LatLng(
-                      _currentLocation.latitude, _currentLocation.longitude),
-                  zoom: 13),
+              onStyleLoadedCallback: addSymbol,
+              myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+              initialCameraPosition: _initialLocation,
               accessToken:
-                  'sk.eyJ1IjoiYmlrZWtlYXBwIiwiYSI6ImNsOWQ0enUzaTA1dGEzb2w5cHBnd2g2cTUifQ.bvZzCcgCbJ3w_dfddXw7zg'),
+                  'sk.eyJ1IjoiYmlrZWtlYXBwIiwiYSI6ImNsOXhkM2hpbjA5Zjgzb3BudTRzenE4cmgifQ.uxW9g_kHepSWSnZ3NA7qTw'),
           // FlutterMap(
           //   mapController: mapController,
           //   options: MapOptions(
@@ -129,42 +199,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           ),
           Positioned(
             bottom: 0,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Card(
-                clipBehavior: Clip.antiAlias,
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        'Hi there!',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 20),
-                      const Text('You are currently here:'),
-                      const Text('<Show the current address here>',
-                          style: TextStyle(color: Colors.indigo)),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.all(20)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Text('Where do you wanna go today?'),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            child: IconButton(
+                onPressed: () {
+                  setCameraPosition();
+                },
+                icon: Icon(
+                  FontAwesomeIcons.arrowLeftLong,
+                  color: Colors.red,
+                  size: 20,
+                )),
           ),
         ],
       ),

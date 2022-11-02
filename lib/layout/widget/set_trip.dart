@@ -1,33 +1,43 @@
+import 'package:bikeke_app/design/app_color.dart';
 import 'package:flutter/material.dart';
 
 class SetTrip extends StatefulWidget {
   SetTrip({super.key});
-  String dropdownvalue = 'Item 1';
 
-  // List of items in our dropdown menu
-  final items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-  ];
   @override
   State<SetTrip> createState() => _SetTripState();
 }
 
 class _SetTripState extends State<SetTrip> {
+  String dropdownslot = 'Slot 1';
+  String dropdownroute = 'Route 1';
+
+  // List of items in our dropdown menu
+  final slots = [
+    'Slot 1',
+    'Slot 2',
+    'Slot 3',
+    'Slot 4',
+    'Slot 5',
+  ];
+  final router = [
+    'Route 1',
+    'Route 2',
+  ];
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       Container(
+        decoration: BoxDecoration(
+            color: AppColor().secondBackgroudColor(),
+            borderRadius: BorderRadius.circular(10)),
+        margin: EdgeInsets.all(20),
         width: double.infinity,
         height: 300,
-        color: Colors.blue,
         child: Container(
           padding: EdgeInsets.all(20),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -35,6 +45,7 @@ class _SetTripState extends State<SetTrip> {
                   Text("Router:"),
                   Spacer(),
                   Container(
+                    width: 250,
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -43,13 +54,13 @@ class _SetTripState extends State<SetTrip> {
                       // Initial Value
 
                       borderRadius: BorderRadius.all(Radius.circular(10)),
-                      value: SetTrip().dropdownvalue,
+                      value: dropdownroute,
 
                       // Down Arrow Icon
                       icon: const Icon(Icons.keyboard_arrow_down),
 
                       // Array list of items
-                      items: SetTrip().items.map((String items) {
+                      items: router.map((String items) {
                         return DropdownMenuItem(
                           value: items,
                           child: Text(items),
@@ -59,7 +70,7 @@ class _SetTripState extends State<SetTrip> {
                       // change button value to selected value
                       onChanged: (String? newValue) {
                         setState(() {
-                          SetTrip().dropdownvalue = newValue!;
+                          dropdownroute = newValue!;
                         });
                       },
                     ),
@@ -69,10 +80,10 @@ class _SetTripState extends State<SetTrip> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text("Router:"),
+                  Text("Slot:"),
                   Spacer(),
                   Container(
-                    width: 300,
+                    width: 250,
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -81,17 +92,13 @@ class _SetTripState extends State<SetTrip> {
                       // Initial Value
 
                       borderRadius: BorderRadius.all(Radius.circular(10)),
-                      value: SetTrip().dropdownvalue,
+                      value: dropdownslot,
 
                       // Down Arrow Icon
-                      icon: Expanded(
-                        child: Positioned(
-                            right: 0,
-                            child: const Icon(Icons.keyboard_arrow_down)),
-                      ),
+                      icon: const Icon(Icons.keyboard_arrow_down),
 
                       // Array list of items
-                      items: SetTrip().items.map((String items) {
+                      items: slots.map((String items) {
                         return DropdownMenuItem(
                           value: items,
                           child: Text(items),
@@ -101,21 +108,47 @@ class _SetTripState extends State<SetTrip> {
                       // change button value to selected value
                       onChanged: (String? newValue) {
                         setState(() {
-                          SetTrip().dropdownvalue = newValue!;
+                          dropdownslot = newValue!;
                         });
                       },
                     ),
                   ),
                 ],
               ),
+              SizedBox(
+                height: 47,
+                width: 129,
+                child: FloatingActionButton(
+                    backgroundColor: Colors.orangeAccent,
+                    shape: BeveledRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    onPressed: () {},
+                    child: Text('Confirm')),
+              )
             ],
           ),
         ),
       ),
       Text('Trip Today'),
-      Container(
-        height: 50,
-        color: Colors.blue,
+      Expanded(
+        child: SingleChildScrollView(
+          child: Container(
+            height: 500,
+            margin: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+                color: AppColor().secondBackgroudColor(),
+                borderRadius: BorderRadius.circular(10)),
+            child: Column(children: [
+              Container(
+                margin: EdgeInsets.all(20),
+                height: 30,
+                decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10)),
+              )
+            ]),
+          ),
+        ),
       ),
     ]);
   }

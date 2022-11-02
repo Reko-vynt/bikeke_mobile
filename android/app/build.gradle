@@ -59,7 +59,11 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+            buildConfigField 'String', "MapboxAccessToken", MAPBOX_ACCESS_TOKEN
         }
+        debug {
+	    buildConfigField 'String', "MapboxAccessToken", MAPBOX_ACCESS_TOKEN
+	    }
     }
 }
 
@@ -71,6 +75,10 @@ dependencies {
     implementation 'com.mapbox.maps:android:10.8.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.firebase:firebase-analytics'
+    implementation "com.google.android.gms:play-services-maps:18.0.2"
+    implementation "com.google.android.gms:play-services-location:19.0.1"
+    implementation "com.google.android.gms:play-services-wearable:17.1.0"
+    implementation "com.google.android.gms:play-services-analytics:18.0.1"
 }
 
 configurations {

@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:bikeke_app/layout/widget/bookers.dart';
 import 'package:bikeke_app/layout/widget/set_trip.dart';
 import 'package:flutter/material.dart';
 import 'package:bikeke_app/layout/widget/bottom_nav_driver.dart';
@@ -68,13 +69,9 @@ class _PlanScreenState extends State<PlanScreen> with TickerProviderStateMixin {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: 132),
-          child: TabBarView(controller: _tabController, children: [
-            SetTrip(),
-            Container(
-              color: Colors.yellow,
-            )
-          ]),
+          margin: EdgeInsets.only(top: 112),
+          child: TabBarView(
+              controller: _tabController, children: [SetTrip(), Booker()]),
         )
       ]),
       bottomNavigationBar: BottomNavBarDriver(),

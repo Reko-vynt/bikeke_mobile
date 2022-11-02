@@ -2,45 +2,18 @@ import 'package:bikeke_app/design/app_color.dart';
 import 'package:bikeke_app/layout/map_driver.dart';
 import 'package:bikeke_app/layout/widget/appbar_driver.dart';
 import 'package:bikeke_app/layout/widget/bottom_nav_driver.dart';
-import 'package:bikeke_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:location/location.dart';
 import 'package:bikeke_app/layout/plan_screen.dart';
 
 class HomeDriver extends StatelessWidget {
   const HomeDriver({Key? key, this.userName = 'Driver'}) : super(key: key);
-  void initializeLocationAndSave() async {
-    // Ensure all permissions are collected for Locations
-    Location _location = Location();
-    bool? _serviceEnabled;
-    PermissionStatus? _permissionGranted;
-
-    _serviceEnabled = await _location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await _location.requestService();
-    }
-
-    _permissionGranted = await _location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await _location.requestPermission();
-    }
-
-    // Get the current user location
-    LocationData _locationData = await _location.getLocation();
-
-    // Get the current user address
-
-    // Store the user location in sharedPreferences
-    sharedPreferences.setDouble('latitude', _locationData.latitude!);
-    sharedPreferences.setDouble('longitude', _locationData.longitude!);
-  }
 
   final String? userName;
+
   @override
   Widget build(BuildContext context) {
-    initializeLocationAndSave();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,

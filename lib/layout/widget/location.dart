@@ -45,8 +45,8 @@ class _SplashState extends State<MyLocation> {
     sharedPreferences.setDouble('latitude', _locationData.latitude!);
     sharedPreferences.setDouble('longitude', _locationData.longitude!);
 
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (_) => const Home()), (route) => false);
+    // Navigator.pushAndRemoveUntil(context,
+    //     MaterialPageRoute(builder: (_) => const Home()), (route) => false);
   }
 
   @override

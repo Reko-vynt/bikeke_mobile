@@ -1,12 +1,11 @@
 import 'package:bikeke_app/helpers/dio_exceptions.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
 String baseUrl = 'https://api.mapbox.com/directions/v5/mapbox';
-String accessToken = dotenv.env[
-    'sk.eyJ1IjoiYmlrZWtlYXBwIiwiYSI6ImNsOWQ0enUzaTA1dGEzb2w5cHBnd2g2cTUifQ.bvZzCcgCbJ3w_dfddXw7zg']!;
+String accessToken =
+    'sk.eyJ1IjoiYmlrZWtlYXBwIiwiYSI6ImNsOXhkM2hpbjA5Zjgzb3BudTRzenE4cmgifQ.uxW9g_kHepSWSnZ3NA7qTw';
 String navType = 'driving';
 
 Dio _dio = Dio();
