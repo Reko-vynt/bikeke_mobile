@@ -34,7 +34,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     location.onLocationChanged.listen((newLoc) async {
       currentLocation = newLoc;
       if (mounted) {
-        addSymbol();
+        updateSymbol();
         setState(() {});
       }
     });
@@ -59,7 +59,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 // For controlling the view of the Map
   final CameraPosition _initialLocation =
       CameraPosition(target: driverLatlng, zoom: 20);
-  void setCameraPosition() async {
+  void setPolyline() async {
     mapController = await _controller.future;
     Map modifiedResponse =
         await getDirectionsAPIResponse(driverLatlng, userLatlng);
@@ -102,7 +102,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         geometry: userLatlng));
   }
 
-  addSymbol() async {
+  updateSymbol() async {
     mapController = await _controller.future;
     Symbol? drivers = await driver;
     mapController?.updateSymbol(
@@ -135,7 +135,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               onMapCreated: (mapController) {
                 _controller.complete(mapController);
               },
-              onStyleLoadedCallback: addSymbol,
+              onStyleLoadedCallback: updateSymbol,
               myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
               initialCameraPosition: _initialLocation,
               accessToken:
@@ -201,7 +201,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             bottom: 0,
             child: IconButton(
                 onPressed: () {
-                  setCameraPosition();
+                  setPolyline();
                 },
                 icon: Icon(
                   FontAwesomeIcons.arrowLeftLong,
