@@ -1,3 +1,4 @@
+import 'package:bikeke_app/Customer/screen/mainScreen.dart';
 import 'package:bikeke_app/layout/login_page.dart';
 import 'package:bikeke_app/service/google_auth_service.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      home: GoogleAuthService().handleAuthState(),
+      // home: GoogleAuthService().handleAuthState(),
+      home: mainScreen(),
     );
   }
 }
