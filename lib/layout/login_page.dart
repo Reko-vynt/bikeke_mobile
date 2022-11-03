@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:bikeke_app/layout/home_driver.dart';
+import 'package:bikeke_app/service/google_auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -106,7 +107,8 @@ class _LoginPageState extends State<LoginPage> {
                   );
                 },
               );
-              login(context, emailController.text, passwordController.text);
+              // login(context, emailController.text, passwordController.text);
+              GoogleAuthService().signInWithGoogle();
             },
             child: Text(
               "Login",

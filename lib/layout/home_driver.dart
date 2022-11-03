@@ -2,6 +2,7 @@ import 'package:bikeke_app/design/app_color.dart';
 import 'package:bikeke_app/layout/map_driver.dart';
 import 'package:bikeke_app/layout/widget/appbar_driver.dart';
 import 'package:bikeke_app/layout/widget/bottom_nav_driver.dart';
+import 'package:bikeke_app/service/google_auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -25,7 +26,12 @@ class HomeDriver extends StatelessWidget {
           title: Row(children: [
             Row(
               children: [
-                CircleAvatar(),
+                TextButton(
+                  onPressed: () {
+                    GoogleAuthService().signOut();
+                  },
+                  child: Icon(Icons.abc),
+                ),
                 Text(
                   'Welcome,$userName',
                   style: TextStyle(color: AppColor().textColor()),
