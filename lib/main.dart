@@ -1,6 +1,5 @@
-import 'package:bikeke_app/Customer/screen/mainScreen.dart';
 import 'package:bikeke_app/layout/login_page.dart';
-import 'package:bikeke_app/service/google_auth_service.dart';
+import 'package:bikeke_app/layout/widget/google_login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -27,7 +26,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       // home: GoogleAuthService().handleAuthState(),
-      home: mainScreen(),
+      home: LoginPage(),
     );
   }
 }

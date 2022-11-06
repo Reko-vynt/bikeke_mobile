@@ -57,6 +57,8 @@ dependencies:
   google_sign_in: ^5.4.2
   firebase_auth: ^4.1.0
   dropdown_button2: ^1.8.9
+  google_one_tap_sign_in: any
+  jwt_decode: ^0.3.1
 
 dev_dependencies:
   flutter_test:

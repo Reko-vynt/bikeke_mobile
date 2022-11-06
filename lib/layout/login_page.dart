@@ -5,6 +5,7 @@ import 'package:bikeke_app/layout/home_driver.dart';
 import 'package:bikeke_app/service/google_auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_one_tap_sign_in/google_one_tap_sign_in.dart';
 
 import '../design/app_color.dart';
 import '../service/firebase_service.dart';
@@ -14,6 +15,70 @@ class LoginPage extends StatefulWidget {
 
   @override
   State<LoginPage> createState() => _LoginPageState();
+}
+
+final String _webClientId =
+    "665971199801-uucsekt36jt716qr607r2rieeqsrulhb.apps.googleusercontent.com";
+void _onSignIn(BuildContext context) async {
+  var data = await GoogleOneTapSignIn.startSignIn(webClientId: _webClientId);
+  if (data != null) {
+    /// Whatever you do with [SignInResult] data
+    print("Id Token : ${data.idToken ?? "-"}");
+    print("ID : ${data.id ?? "-"}");
+    print("ID : ${data.googleIdToken ?? "-"}");
+    print('ID TOKEN');
+    String token = data.idToken;
+    String idtoken = "";
+    while (token.length > 0) {
+      int initLength = (token.length >= 500 ? 500 : token.length);
+      print(token.substring(0, initLength));
+      idtoken = idtoken + token.substring(0, initLength);
+      int endLength = token.length;
+      token = token.substring(initLength, endLength);
+    }
+    Future.delayed(Duration(seconds: 1), () {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomeDriver()));
+    });
+  }
+}
+
+void _onSignInWithHandle(BuildContext context) async {
+  var result = await GoogleOneTapSignIn.handleSignIn(webClientId: _webClientId);
+
+  if (result.isTemporaryBlock) {
+    // TODO: Tell your users about this status
+    print("Temporary BLOCK");
+  }
+
+  if (result.isCanceled) {
+    // TODO: Tell your users about this status
+    print("Canceled");
+  }
+
+  if (result.isFail) {
+    // TODO: Tell your users about this status
+  }
+
+  if (result.isOk) {
+    // TODO: Whatever you do with [SignInResult] data
+    print("OK");
+    print("Id Token : ${result.data?.idToken ?? "-"}");
+    print("Email : ${result.data?.username ?? "-"}");
+    String token = result.data?.idToken;
+    String idtoken = "";
+    while (token.length > 0) {
+      int initLength = (token.length >= 500 ? 500 : token.length);
+      print(token.substring(0, initLength));
+      idtoken = idtoken + token.substring(0, initLength);
+      int endLength = token.length;
+      token = token.substring(initLength, endLength);
+    }
+    Future.delayed(Duration(seconds: 1), () {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomeDriver()));
+    });
+  }
 }
 
 login(BuildContext context, String email, String password) {
@@ -94,6 +159,7 @@ class _LoginPageState extends State<LoginPage> {
             shape: BeveledRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
             onPressed: () {
+              _onSignIn(context);
               showDialog(
                 barrierColor: Color(0x01000000),
                 context: context,
@@ -108,7 +174,6 @@ class _LoginPageState extends State<LoginPage> {
                 },
               );
               // login(context, emailController.text, passwordController.text);
-              GoogleAuthService().signInWithGoogle();
             },
             child: Text(
               "Login",
